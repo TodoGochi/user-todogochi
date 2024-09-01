@@ -16,6 +16,9 @@ export class UserService {
     if (isExistEmail) {
       throw new ApiError('USER-0001');
     }
+    if (input.type === 'EMAIL' && !input.password) {
+      throw new ApiError('USER-0002');
+    }
     const user = await this.userRepository.create(input);
     return user;
   }

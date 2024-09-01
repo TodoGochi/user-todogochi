@@ -12,4 +12,9 @@ export const ERRORS = {
     message: 'Email already exists',
     statusCode: HttpStatusCode.Conflict,
   },
+  'USER-0002': {
+    errorCode: 'USER-0002',
+    message: 'Password is required',
+    statusCode: HttpStatusCode.BadRequest,
+  },
 };
