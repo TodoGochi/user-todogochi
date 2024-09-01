@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { HttpExceptionFilter } from './common/core/filters/http-exception.filter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Config } from './common/environment/config';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { Config } from './common/environment/config';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
