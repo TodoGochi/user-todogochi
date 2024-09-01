@@ -2,9 +2,22 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpExceptionFilter } from './common/core/filters/http-exception.filter';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Config } from './common/environment/config';
 
 @Module({
-  imports: [],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: Config.getEnvironment().DATABASE.type,
+      host: Config.getEnvironment().DATABASE.host,
+      port: Config.getEnvironment().DATABASE.port,
+      username: Config.getEnvironment().DATABASE.username,
+      password: Config.getEnvironment().DATABASE.password,
+      database: Config.getEnvironment().DATABASE.database,
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+  ],
   controllers: [AppController],
   providers: [
     AppService,
