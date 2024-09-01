@@ -20,6 +20,7 @@ export class UserService {
       throw new ApiError('USER-0002');
     }
     const user = await this.userRepository.create(input);
+
     return user;
   }
 }
