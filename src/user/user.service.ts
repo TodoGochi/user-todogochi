@@ -23,4 +23,13 @@ export class UserService {
 
     return user;
   }
+
+  async emailCheck(input: {
+    email: string;
+  }): Promise<{ email: string; isAvailable: boolean }> {
+    const isExistEmail = await this.userRepository.getOneByEmail(input.email);
+    const isAvailable = !isExistEmail;
+
+    return { email: input.email, isAvailable };
+  }
 }

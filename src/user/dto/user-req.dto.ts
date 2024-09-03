@@ -12,3 +12,8 @@ export class SignUpReqBodyDto {
   @IsString()
   password: string;
 }
+
+export class EmailCheckReqBodyDto {
+  @IsEmail()
+  email: string;
+}
