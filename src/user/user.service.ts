@@ -42,6 +42,7 @@ export class UserService {
       user.userId,
       user.email,
     );
+    delete user.password;
 
     return { user, tokens };
   }
