@@ -47,7 +47,10 @@ export class UserService {
     return { user, tokens };
   }
 
-  async signIn(input: { email: string; password: string }) {
+  async signIn(input: { email: string; password: string }): Promise<{
+    user: User;
+    tokens: { accessToken: string; refreshToken: string };
+  }> {
     const user = await this.userRepository.getOneByEmail(input.email);
     if (!user) {
       throw new ApiError('USER-0003');

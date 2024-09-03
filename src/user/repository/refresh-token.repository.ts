@@ -7,10 +7,10 @@ import { RefreshToken } from '../entity/refresh-token.entity';
 export class RefreshTokenRepository {
   constructor(
     @InjectRepository(RefreshToken)
-    private readonly userRepository: Repository<RefreshToken>,
+    private readonly refreshTokenRepository: Repository<RefreshToken>,
   ) {}
 
   async save(data: Partial<RefreshToken>) {
-    return this.userRepository.save(data);
+    return this.refreshTokenRepository.save(data);
   }
 }
