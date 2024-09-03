@@ -20,4 +20,8 @@ export class UserRepository {
   async getOneByEmail(email: string) {
     return this.userRepository.findOne({ where: { email } });
   }
+
+  async update(user: User) {
+    return this.userRepository.save(user);
+  }
 }

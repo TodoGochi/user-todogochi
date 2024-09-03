@@ -17,4 +17,9 @@ export const ERRORS = {
     message: 'Password is required',
     statusCode: HttpStatusCode.BadRequest,
   },
+  'USER-0003': {
+    errorCode: 'USER-0003',
+    message: 'Access Denied',
+    statusCode: HttpStatusCode.Unauthorized,
+  },
 };

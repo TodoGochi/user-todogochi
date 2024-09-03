@@ -15,7 +15,10 @@ export class UserController {
   }
 
   @Post('sign-up')
-  async signUp(@Body() body: SignUpReqBodyDto): Promise<User> {
+  async signUp(@Body() body: SignUpReqBodyDto): Promise<{
+    user: User;
+    tokens: { accessToken: string; refreshToken: string };
+  }> {
     return this.userService.signUp(body);
   }
 }

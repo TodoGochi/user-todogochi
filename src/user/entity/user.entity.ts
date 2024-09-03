@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { SignUpType } from '../constant/sign-up.enum';
+import { RefreshToken } from './refresh-token.entity';
 
 @Entity()
 export class User {
@@ -37,4 +39,9 @@ export class User {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user, {
+    eager: true,
+  })
+  refreshToken: RefreshToken;
 }
