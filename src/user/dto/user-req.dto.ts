@@ -5,6 +5,9 @@ export class SignUpReqBodyDto {
   @IsEmail()
   email: string;
 
+  @IsString()
+  nickName: string;
+
   @IsEnum(SignUpType)
   signUpType: SignUpType;
 

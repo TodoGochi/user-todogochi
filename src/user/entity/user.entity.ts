@@ -20,6 +20,9 @@ export class User {
   })
   signUpType: SignUpType;
 
+  @Column({ name: 'nick_name' })
+  nickName: string;
+
   @Column()
   email: string;
 

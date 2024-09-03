@@ -11,6 +11,7 @@ export class UserService {
 
   async signUp(input: {
     email: string;
+    nickName: string;
     signUpType: SignUpType;
     password?: string;
   }): Promise<User> {
@@ -24,6 +25,7 @@ export class UserService {
     const hashedPassword = await argon2.hash(input.password);
     const user = await this.userRepository.create({
       email: input.email,
+      nickName: input.nickName,
       signUpType: input.signUpType,
       password: hashedPassword,
     });
@@ -36,7 +38,7 @@ export class UserService {
   }): Promise<{ email: string; isAvailable: boolean }> {
     const isExistEmail = await this.userRepository.getOneByEmail(input.email);
     const isAvailable = !isExistEmail;
-
+    console.log(isExistEmail);
     return { email: input.email, isAvailable };
   }
 }
