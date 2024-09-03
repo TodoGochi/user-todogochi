@@ -22,4 +22,9 @@ export const ERRORS = {
     message: 'Access Denied',
     statusCode: HttpStatusCode.Unauthorized,
   },
+  'USER-0004': {
+    errorCode: 'USER-0004',
+    message: 'User not found',
+    statusCode: HttpStatusCode.NotFound,
+  },
 };

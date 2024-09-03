@@ -20,3 +20,11 @@ export class EmailCheckReqBodyDto {
   @IsEmail()
   email: string;
 }
+
+export class SignInReqBodyDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  password: string;
+}

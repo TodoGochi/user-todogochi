@@ -47,6 +47,24 @@ export class UserService {
     return { user, tokens };
   }
 
+  async signIn(input: { email: string; password: string }) {
+    const user = await this.userRepository.getOneByEmail(input.email);
+    if (!user) {
+      throw new ApiError('USER-0003');
+    }
+    const passwordMatched = await argon2.verify(user.password, input.password);
+    if (!passwordMatched) {
+      throw new ApiError('USER-0004');
+    }
+    const tokens = await this.authService.generateTokens(
+      user.userId,
+      user.email,
+    );
+    delete user.password;
+
+    return { user, tokens };
+  }
+
   async emailCheck(input: {
     email: string;
   }): Promise<{ email: string; isAvailable: boolean }> {
