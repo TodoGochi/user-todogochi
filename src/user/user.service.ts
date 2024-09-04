@@ -18,8 +18,7 @@ export class UserService {
   async signUp(input: {
     email: string;
     nickName: string;
-    signUpType: SignUpType;
-    password?: string;
+    password: string;
   }): Promise<{
     user: User;
     tokens: { accessToken: string; refreshToken: string };
@@ -28,14 +27,11 @@ export class UserService {
     if (isExistEmail) {
       throw new ApiError('USER-0001');
     }
-    if (input.signUpType === SignUpType.EMAIL && !input.password) {
-      throw new ApiError('USER-0002');
-    }
     const hashedPassword = await argon2.hash(input.password);
     const user = await this.userRepository.create({
       email: input.email,
       nickName: input.nickName,
-      signUpType: input.signUpType,
+      signUpType: SignUpType.EMAIL,
       password: hashedPassword,
     });
     const tokens = await this.authService.generateTokens(

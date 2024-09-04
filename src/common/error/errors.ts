@@ -1,5 +1,4 @@
 import { HttpStatusCode } from 'axios';
-import { error } from 'console';
 
 export const ERRORS = {
   'USER-0000': {

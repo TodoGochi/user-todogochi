@@ -1,5 +1,4 @@
-import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
-import { SignUpType } from '../constant/sign-up.enum';
+import { IsEmail, IsString } from 'class-validator';
 
 export class SignUpReqBodyDto {
   @IsEmail()
@@ -8,10 +7,6 @@ export class SignUpReqBodyDto {
   @IsString()
   nickName: string;
 
-  @IsEnum(SignUpType)
-  signUpType: SignUpType;
-
-  @IsOptional()
   @IsString()
   password: string;
 }
