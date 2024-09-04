@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { SignUpType } from '../constant/sign-up.enum';
 import { RefreshToken } from './refresh-token.entity';
+import { UserRole } from '../constant/role.enum';
 
 @Entity()
 export class User {
@@ -30,6 +31,13 @@ export class User {
 
   @Column({ nullable: true })
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.MEMBER,
+  })
+  role: UserRole;
 
   @CreateDateColumn()
   created_at: Date;
