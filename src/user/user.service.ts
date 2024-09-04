@@ -15,69 +15,19 @@ export class UserService {
     private readonly authService: AuthService,
   ) {}
 
-  async signUp(input: {
-    email: string;
-    nickName: string;
-    password: string;
-  }): Promise<{
-    user: User;
-    tokens: { accessToken: string; refreshToken: string };
-  }> {
-    const isExistEmail = await this.userRepository.getOneByEmail(input.email);
-    if (isExistEmail) {
-      throw new ApiError('USER-0001');
-    }
-    const hashedPassword = await argon2.hash(input.password);
-    const user = await this.userRepository.create({
-      email: input.email,
-      nickName: input.nickName,
-      signUpType: SignUpType.EMAIL,
-      password: hashedPassword,
-    });
-    const tokens = await this.authService.generateTokens(
-      user.userId,
-      user.email,
-    );
-    delete user.password;
-
-    return { user, tokens };
-  }
-
-  async signIn(input: { email: string; password: string }): Promise<{
-    user: User;
-    tokens: { accessToken: string; refreshToken: string };
-  }> {
-    const user = await this.userRepository.getOneByEmail(input.email);
-    if (!user) {
-      throw new ApiError('USER-0003');
-    }
-    const passwordMatched = await argon2.verify(user.password, input.password);
-    if (!passwordMatched) {
-      throw new ApiError('USER-0004');
-    }
-    const tokens = await this.authService.generateTokens(
-      user.userId,
-      user.email,
-    );
-    delete user.password;
-
-    return { user, tokens };
-  }
-
-  async emailCheck(input: {
-    email: string;
-  }): Promise<{ email: string; isAvailable: boolean }> {
-    const isExistEmail = await this.userRepository.getOneByEmail(input.email);
-    const isAvailable = !isExistEmail;
-
-    return { email: input.email, isAvailable };
-  }
-
   async getOneByPk(userId: number): Promise<User> {
     return this.userRepository.getOneByPk(userId);
   }
 
   async saveRefreshToken(userId: number, refreshToken: string) {
     return this.refreshTokenRepository.save({ userId, token: refreshToken });
+  }
+
+  async getOneByEmail(email: string): Promise<User> {
+    return this.userRepository.getOneByEmail(email);
+  }
+
+  async createUser(input: Partial<User>) {
+    return this.userRepository.create(input);
   }
 }

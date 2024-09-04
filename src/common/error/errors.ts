@@ -13,7 +13,7 @@ export const ERRORS = {
   },
   'USER-0002': {
     errorCode: 'USER-0002',
-    message: 'Password is required',
+    message: 'Password does not match',
     statusCode: HttpStatusCode.BadRequest,
   },
   'USER-0003': {

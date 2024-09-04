@@ -6,7 +6,7 @@ export class RefreshToken {
   @PrimaryColumn({ name: 'user_id' })
   userId: number;
 
-  @Column()
+  @Column({ nullable: true })
   token: string;
 
   @OneToOne(() => User, (user) => user.refreshToken, { onDelete: 'CASCADE' })
