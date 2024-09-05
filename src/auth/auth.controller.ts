@@ -1,4 +1,13 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
   EmailCheckReqBodyDto,
@@ -6,6 +15,8 @@ import {
   SignUpReqBodyDto,
 } from './dto/auth-req.dto';
 import { User } from 'src/user/entity/user.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -27,13 +38,22 @@ export class AuthController {
   }
 
   @Post('sign-in')
-  async signIn(@Body() body: SignInReqBodyDto): Promise<{
+  async emailSignIn(@Body() body: SignInReqBodyDto): Promise<{
     user: User;
     tokens: { accessToken: string; refreshToken: string };
   }> {
-    return this.authService.signIn(body);
+    return this.authService.emailSignIn(body);
   }
   // Refresh Token
 
-  // oauth / kakao
+  @Get('sign-in/kakao')
+  async signInKakao() {
+    return this.authService.signInKakao();
+  }
+
+  @Get('kakao/callback')
+  @UseGuards(AuthGuard('kakao'))
+  async kakaoAuthCallback(@Req() req: Request) {
+    return this.authService.kakaoAuthCallback(req);
+  }
 }

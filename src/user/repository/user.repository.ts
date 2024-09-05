@@ -21,6 +21,10 @@ export class UserRepository {
     return this.userRepository.findOne({ where: { email } });
   }
 
+  async getOneByOauthId(oauthId: string) {
+    return this.userRepository.findOne({ where: { oauthId } });
+  }
+
   async update(user: User) {
     return this.userRepository.save(user);
   }

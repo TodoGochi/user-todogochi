@@ -9,6 +9,7 @@ import {
 } from 'class-validator';
 import { DatabaseConfig } from './object-config/database.config';
 import { JwtConfig } from './object-config/jwt.config';
+import { KakaoAuthConfig } from './object-config/kakao-auth.config';
 
 export class Environment {
   @IsIn(['production', 'test', 'development'])
@@ -40,5 +41,14 @@ export class Environment {
     accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
     refreshSecret: process.env.JWT_REFRESH_SECRET,
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+  });
+
+  // Kakao Auth
+  @ValidateNested()
+  @Type(() => KakaoAuthConfig)
+  KAKAO_AUTH: KakaoAuthConfig = plainToClass(KakaoAuthConfig, {
+    clientId: process.env.KAKAO_CLIENT_ID,
+    clientSecret: process.env.KAKAO_CLIENT_SECRET,
+    redirectUri: process.env.KAKAO_REDIRECT_URI,
   });
 }

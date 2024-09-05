@@ -16,6 +16,9 @@ export class User {
   @PrimaryGeneratedColumn({ name: 'user_id' })
   userId: number;
 
+  @Column()
+  oauthId: string;
+
   @Column({
     type: 'enum',
     enum: SignUpType,
@@ -26,10 +29,10 @@ export class User {
   @Column({ name: 'nick_name' })
   nickName: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
-  @Column({ nullable: true })
+  @Column()
   password: string;
 
   @Column({

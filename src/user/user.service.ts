@@ -24,10 +24,17 @@ export class UserService {
   }
 
   async getOneByEmail(email: string): Promise<User> {
+    if (!email) {
+      return null;
+    }
     return this.userRepository.getOneByEmail(email);
   }
 
   async createUser(input: Partial<User>) {
     return this.userRepository.create(input);
+  }
+
+  async getOneByOauthId(oauthId: string) {
+    return this.userRepository.getOneByOauthId(oauthId);
   }
 }

@@ -5,6 +5,7 @@ import { Config } from './common/environment/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const port = Config.getEnvironment().PORT;
   await app.listen(port);

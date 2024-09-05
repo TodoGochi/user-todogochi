@@ -6,6 +6,7 @@ import { ApiError } from 'src/common/error/api.error';
 import { User } from 'src/user/entity/user.entity';
 import * as argon2 from 'argon2';
 import { SignUpType } from 'src/user/constant/sign-up.enum';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -61,9 +62,11 @@ export class AuthService {
   }
 
   async signUp(input: {
-    email: string;
     nickName: string;
     password: string;
+    email?: string;
+    oauthId?: string;
+    signUpType?: SignUpType;
   }): Promise<{
     user: User;
     tokens: { accessToken: string; refreshToken: string };
@@ -76,7 +79,8 @@ export class AuthService {
     const user = await this.userService.createUser({
       email: input.email,
       nickName: input.nickName,
-      signUpType: SignUpType.EMAIL,
+      oauthId: input.oauthId,
+      signUpType: input.signUpType || SignUpType.EMAIL,
       password: hashedPassword,
     });
     const tokens = await this.generateTokens(user.userId, user.email);
@@ -85,7 +89,7 @@ export class AuthService {
     return { user, tokens };
   }
 
-  async signIn(input: { email: string; password: string }): Promise<{
+  async emailSignIn(input: { email: string; password: string }): Promise<{
     user: User;
     tokens: { accessToken: string; refreshToken: string };
   }> {
@@ -103,6 +107,20 @@ export class AuthService {
     return { user, tokens };
   }
 
+  async oauthSignIn(input: { oauthId: string }): Promise<{
+    user: User;
+    tokens: { accessToken: string; refreshToken: string };
+  }> {
+    const user = await this.userService.getOneByOauthId(input.oauthId);
+    if (!user) {
+      throw new ApiError('USER-0004');
+    }
+    const tokens = await this.generateTokens(user.userId, user.email);
+    delete user.password;
+
+    return { user, tokens };
+  }
+
   async emailCheck(input: { email: string }) {
     const isExistEmail = await this.userService.getOneByEmail(input.email);
     const isAvailable = !isExistEmail;
@@ -110,5 +128,29 @@ export class AuthService {
     return { email: input.email, isAvailable };
   }
 
-  // oauth / kakao
+  async signInKakao() {
+    const kakaoClientId = Config.getEnvironment().KAKAO_AUTH.clientId;
+    const redirectUri = Config.getEnvironment().KAKAO_AUTH.redirectUri;
+    const redirectUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${redirectUri}&response_type=code`;
+
+    return redirectUrl;
+  }
+
+  async kakaoAuthCallback(req: any) {
+    const kakaoUserProfile = req.user;
+    const isExistUser = await this.userService.getOneByOauthId(
+      String(kakaoUserProfile.oauthId),
+    );
+    if (!isExistUser) {
+      const user = await this.signUp({
+        nickName: kakaoUserProfile.name,
+        password: String(kakaoUserProfile.oauthId),
+        oauthId: String(kakaoUserProfile.oauthId),
+        signUpType: SignUpType.KAKAO,
+      });
+
+      return user;
+    }
+    return this.oauthSignIn({ oauthId: String(kakaoUserProfile.oauthId) });
+  }
 }
