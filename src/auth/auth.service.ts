@@ -22,7 +22,6 @@ export class AuthService {
       this.jwtService.signAsync(
         {
           sub: userId,
-          email,
         },
         {
           secret: jwtConfig.accessSecret,
@@ -32,7 +31,6 @@ export class AuthService {
       this.jwtService.signAsync(
         {
           sub: userId,
-          email,
         },
         {
           secret: jwtConfig.refreshSecret,
