@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Config } from 'src/common/environment/config';
 import { UserService } from 'src/user/user.service';
@@ -7,6 +7,8 @@ import { User } from 'src/user/entity/user.entity';
 import * as argon2 from 'argon2';
 import { SignUpType } from 'src/user/constant/sign-up.enum';
 import { Request } from 'express';
+
+const logger = new Logger('AuthService');
 
 @Injectable()
 export class AuthService {
@@ -128,9 +130,11 @@ export class AuthService {
 
   async signInKakao(req: any) {
     const kakaoUserProfile = req.user;
+    logger.log('kakaoUserProfile :: ', kakaoUserProfile);
     const isExistUser = await this.userService.getOneByOauthId(
       String(kakaoUserProfile.oauthId),
     );
+    logger.log('isExistUser :: ', isExistUser);
     if (!isExistUser) {
       const user = await this.signUp({
         nickName: kakaoUserProfile.name,
@@ -138,9 +142,10 @@ export class AuthService {
         oauthId: String(kakaoUserProfile.oauthId),
         signUpType: SignUpType.KAKAO,
       });
-
+      logger.log('user :: ', user);
       return user;
     }
+
     return this.oauthSignIn({ oauthId: String(kakaoUserProfile.oauthId) });
   }
 }
