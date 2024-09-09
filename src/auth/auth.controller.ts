@@ -46,7 +46,7 @@ export class AuthController {
     return this.authService.emailSignIn(body);
   }
 
-  @Get('sign-in/kakao')
+  @Post('sign-in/kakao')
   @UseGuards(AuthGuard('kakao'))
   async signInKakao(@Query('code') code: string, @Req() req: Request) {
     return this.authService.signInKakao(req);
