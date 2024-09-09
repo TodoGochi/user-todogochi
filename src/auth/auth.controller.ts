@@ -18,7 +18,7 @@ import {
 import { User } from 'src/user/entity/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
-const logger = new Logger('AuthController');
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -49,7 +49,6 @@ export class AuthController {
   @Get('sign-in/kakao')
   @UseGuards(AuthGuard('kakao'))
   async signInKakao(@Query('code') code: string, @Req() req: Request) {
-    logger.log('req.user :: ' + req.user);
     return this.authService.signInKakao(req);
   }
 }
