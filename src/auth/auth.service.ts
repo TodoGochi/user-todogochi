@@ -18,7 +18,7 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async generateTokens(userId: number, email: string) {
+  async generateTokens(userId: number) {
     const jwtConfig = Config.getEnvironment().JWT;
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
@@ -56,9 +56,9 @@ export class AuthService {
     if (user.refreshToken.token !== refreshToken) {
       throw new ApiError('USER-0003');
     }
-    const tokens = await this.generateTokens(user.userId, user.email);
+    const tokens = await this.generateTokens(user.userId);
 
-    return tokens;
+    return { user, tokens };
   }
 
   async signUp(input: {
@@ -83,7 +83,7 @@ export class AuthService {
       signUpType: input.signUpType || SignUpType.EMAIL,
       password: hashedPassword,
     });
-    const tokens = await this.generateTokens(user.userId, user.email);
+    const tokens = await this.generateTokens(user.userId);
     delete user.password;
 
     return { user, tokens };
@@ -101,7 +101,7 @@ export class AuthService {
     if (!passwordMatched) {
       throw new ApiError('USER-0002');
     }
-    const tokens = await this.generateTokens(user.userId, user.email);
+    const tokens = await this.generateTokens(user.userId);
     delete user.password;
 
     return { user, tokens };
@@ -115,7 +115,7 @@ export class AuthService {
     if (!user) {
       throw new ApiError('USER-0004');
     }
-    const tokens = await this.generateTokens(user.userId, user.email);
+    const tokens = await this.generateTokens(user.userId);
     delete user.password;
 
     return { user, tokens };

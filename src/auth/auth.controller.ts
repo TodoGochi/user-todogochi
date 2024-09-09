@@ -12,12 +12,14 @@ import {
 import { AuthService } from './auth.service';
 import {
   EmailCheckReqBodyDto,
+  RefreshAccessTokenReqBodyDto,
   SignInReqBodyDto,
   SignUpReqBodyDto,
 } from './dto/auth-req.dto';
 import { User } from 'src/user/entity/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
+import { RefreshTokenGuard } from 'src/common/core/guards/refresh-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -50,5 +52,16 @@ export class AuthController {
   @UseGuards(AuthGuard('kakao'))
   async signInKakao(@Query('code') code: string, @Req() req: Request) {
     return this.authService.signInKakao(req);
+  }
+
+  @Post('refresh')
+  @UseGuards(RefreshTokenGuard)
+  async RefreshAccessToken(
+    @Req() req: Request,
+    @Body() body: RefreshAccessTokenReqBodyDto,
+  ) {
+    const userId = req.user['sub'];
+    const refreshToken = req.user['refreshToken'];
+    return this.authService.refreshTokens(refreshToken, userId);
   }
 }

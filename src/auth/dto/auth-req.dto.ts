@@ -23,3 +23,8 @@ export class SignInReqBodyDto {
   @IsString()
   password: string;
 }
+
+export class RefreshAccessTokenReqBodyDto {
+  @IsString()
+  oldRefreshToken: string;
+}
