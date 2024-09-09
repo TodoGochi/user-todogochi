@@ -126,15 +126,7 @@ export class AuthService {
     return { email: input.email, isAvailable };
   }
 
-  async signInKakao() {
-    const kakaoClientId = Config.getEnvironment().KAKAO_AUTH.clientId;
-    const redirectUri = Config.getEnvironment().KAKAO_AUTH.redirectUri;
-    const redirectUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${redirectUri}&response_type=code`;
-
-    return redirectUrl;
-  }
-
-  async kakaoAuthCallback(req: any) {
+  async signInKakao(req: any) {
     const kakaoUserProfile = req.user;
     const isExistUser = await this.userService.getOneByOauthId(
       String(kakaoUserProfile.oauthId),

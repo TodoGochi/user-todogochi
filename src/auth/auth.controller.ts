@@ -44,16 +44,10 @@ export class AuthController {
   }> {
     return this.authService.emailSignIn(body);
   }
-  // Refresh Token
 
-  @Get('sign-in/kakao')
-  async signInKakao() {
-    return this.authService.signInKakao();
-  }
-
-  @Get('kakao/callback')
+  @Post('sign-in/kakao')
   @UseGuards(AuthGuard('kakao'))
-  async kakaoAuthCallback(@Req() req: Request) {
-    return this.authService.kakaoAuthCallback(req);
+  async signInKakao(@Req() req: Request) {
+    return this.authService.signInKakao(req);
   }
 }
