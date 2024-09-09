@@ -130,11 +130,9 @@ export class AuthService {
 
   async signInKakao(req: any) {
     const kakaoUserProfile = req.user;
-    logger.log('kakaoUserProfile :: ', kakaoUserProfile);
     const isExistUser = await this.userService.getOneByOauthId(
       String(kakaoUserProfile.oauthId),
     );
-    logger.log('isExistUser :: ', isExistUser);
     if (!isExistUser) {
       const user = await this.signUp({
         nickName: kakaoUserProfile.name,
@@ -142,10 +140,9 @@ export class AuthService {
         oauthId: String(kakaoUserProfile.oauthId),
         signUpType: SignUpType.KAKAO,
       });
-      logger.log('user :: ', user);
+
       return user;
     }
-
     return this.oauthSignIn({ oauthId: String(kakaoUserProfile.oauthId) });
   }
 }
