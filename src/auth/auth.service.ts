@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   async refreshTokens(refreshToken: string, userId: number) {
-    const user = await this.userService.getOneByPk(userId);
+    const user = await this.userService.getUserByPk(userId);
     if (!user || !user.refreshToken?.token) {
       throw new ApiError('USER-0003');
     }

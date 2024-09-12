@@ -15,7 +15,7 @@ export class UserService {
     private readonly authService: AuthService,
   ) {}
 
-  async getOneByPk(userId: number): Promise<User> {
+  async getUserByPk(userId: number): Promise<User> {
     return this.userRepository.getOneByPk(userId);
   }
 
