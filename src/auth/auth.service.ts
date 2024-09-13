@@ -6,7 +6,6 @@ import { ApiError } from 'src/common/error/api.error';
 import { User } from 'src/user/entity/user.entity';
 import * as argon2 from 'argon2';
 import { SignUpType } from 'src/user/constant/sign-up.enum';
-import { Request } from 'express';
 
 const logger = new Logger('AuthService');
 
@@ -18,12 +17,13 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async generateTokens(userId: number) {
+  async generateTokens(user: User) {
     const jwtConfig = Config.getEnvironment().JWT;
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
-          sub: userId,
+          sub: user.userId,
+          role: user.role,
         },
         {
           secret: jwtConfig.accessSecret,
@@ -32,7 +32,8 @@ export class AuthService {
       ),
       this.jwtService.signAsync(
         {
-          sub: userId,
+          sub: user.userId,
+          role: user.role,
         },
         {
           secret: jwtConfig.refreshSecret,
@@ -40,7 +41,7 @@ export class AuthService {
         },
       ),
     ]);
-    await this.userService.saveRefreshToken(userId, refreshToken);
+    await this.userService.saveRefreshToken(user.userId, refreshToken);
 
     return {
       accessToken,
@@ -56,7 +57,7 @@ export class AuthService {
     if (user.refreshToken.token !== refreshToken) {
       throw new ApiError('USER-0003');
     }
-    const tokens = await this.generateTokens(user.userId);
+    const tokens = await this.generateTokens(user);
 
     return { user, tokens };
   }
@@ -83,7 +84,7 @@ export class AuthService {
       signUpType: input.signUpType || SignUpType.EMAIL,
       password: hashedPassword,
     });
-    const tokens = await this.generateTokens(user.userId);
+    const tokens = await this.generateTokens(user);
     delete user.password;
 
     return { user, tokens };
@@ -101,7 +102,7 @@ export class AuthService {
     if (!passwordMatched) {
       throw new ApiError('USER-0002');
     }
-    const tokens = await this.generateTokens(user.userId);
+    const tokens = await this.generateTokens(user);
     delete user.password;
 
     return { user, tokens };
@@ -115,7 +116,7 @@ export class AuthService {
     if (!user) {
       throw new ApiError('USER-0004');
     }
-    const tokens = await this.generateTokens(user.userId);
+    const tokens = await this.generateTokens(user);
     delete user.password;
 
     return { user, tokens };
