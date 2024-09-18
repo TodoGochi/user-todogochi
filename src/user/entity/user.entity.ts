@@ -16,7 +16,7 @@ export class User {
   @PrimaryGeneratedColumn({ name: 'user_id' })
   userId: number;
 
-  @Column()
+  @Column({ nullable: true, name: 'oauth_id' })
   oauthId: string;
 
   @Column({
