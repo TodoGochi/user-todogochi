@@ -11,8 +11,8 @@ export class UserController {
     return this.userService.getUserByPk(params.userId);
   }
 
-  @Get(':userId/coin-transaction')
+  @Get(':userId/coin-transactions')
   async getCoinTransactionByUserId(@Param() params: UserIdReqParamDto) {
-    return this.userService.getCoinTransactionByUserId(params.userId);
+    return this.userService.getCoinTransactionsByUserId(params.userId);
   }
 }

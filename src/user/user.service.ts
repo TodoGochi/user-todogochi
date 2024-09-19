@@ -37,7 +37,7 @@ export class UserService {
     return this.userRepository.getOneByOauthId(oauthId);
   }
 
-  async getCoinTransactionByUserId(userId: number) {
+  async getCoinTransactionsByUserId(userId: number) {
     return this.coinTransactionRepository.getAllByUserId(userId);
   }
 }
