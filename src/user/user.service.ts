@@ -56,12 +56,14 @@ export class UserService {
     }
     user.coin += input.changeAmount;
     await this.userRepository.update(user);
-
-    return this.coinTransactionRepository.create({
+    const coinTransaction = await this.coinTransactionRepository.create({
       user,
       changeAmount: input.changeAmount,
       description: input.description,
       coin: user.coin,
     });
+    delete coinTransaction.user.refreshToken;
+
+    return coinTransaction;
   }
 }
