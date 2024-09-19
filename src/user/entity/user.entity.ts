@@ -19,6 +19,9 @@ export class User {
   @Column({ nullable: true, name: 'oauth_id' })
   oauthId: string;
 
+  @Column({ default: 0 })
+  coin: number;
+
   @Column({
     type: 'enum',
     enum: SignUpType,
