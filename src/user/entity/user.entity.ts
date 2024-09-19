@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -10,6 +11,7 @@ import {
 import { SignUpType } from '../constant/sign-up.enum';
 import { RefreshToken } from './refresh-token.entity';
 import { UserRole } from '../constant/role.enum';
+import { CoinTransaction } from './coin-transaction.entity';
 
 @Entity()
 export class User {
@@ -58,4 +60,7 @@ export class User {
     eager: true,
   })
   refreshToken: RefreshToken;
+
+  @OneToMany(() => CoinTransaction, (coinTransaction) => coinTransaction.user)
+  coinTransactions: CoinTransaction[];
 }

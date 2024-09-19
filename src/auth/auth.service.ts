@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Config } from 'src/common/environment/config';
 import { UserService } from 'src/user/user.service';
@@ -6,8 +6,6 @@ import { ApiError } from 'src/common/error/api.error';
 import { User } from 'src/user/entity/user.entity';
 import * as argon2 from 'argon2';
 import { SignUpType } from 'src/user/constant/sign-up.enum';
-
-const logger = new Logger('AuthService');
 
 @Injectable()
 export class AuthService {

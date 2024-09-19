@@ -7,14 +7,21 @@ import { UserRepository } from './repository/user.repository';
 import { RefreshToken } from './entity/refresh-token.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { RefreshTokenRepository } from './repository/refresh-token.repository';
+import { CoinTransaction } from './entity/coin-transaction.entity';
+import { CoinTransactionRepository } from './repository/coin-transaction.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, RefreshToken]),
+    TypeOrmModule.forFeature([User, RefreshToken, CoinTransaction]),
     forwardRef(() => AuthModule),
   ],
   controllers: [UserController],
-  providers: [UserService, UserRepository, RefreshTokenRepository],
+  providers: [
+    UserService,
+    UserRepository,
+    RefreshTokenRepository,
+    CoinTransactionRepository,
+  ],
   exports: [UserService],
 })
 export class UserModule {}
