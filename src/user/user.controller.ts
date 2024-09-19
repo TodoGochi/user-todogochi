@@ -1,6 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserIdReqParamDto } from './dto/user-req.dto';
+import {
+  CreateCoinTransactionReqBodyDto,
+  UserIdReqParamDto,
+} from './dto/user-req.dto';
 
 @Controller('user')
 export class UserController {
@@ -14,5 +17,16 @@ export class UserController {
   @Get(':userId/coin-transactions')
   async getCoinTransactionByUserId(@Param() params: UserIdReqParamDto) {
     return this.userService.getCoinTransactionsByUserId(params.userId);
+  }
+
+  @Post(':userId/coin-transactions')
+  async createCoinTransaction(
+    @Param() params: UserIdReqParamDto,
+    @Body() body: CreateCoinTransactionReqBodyDto,
+  ) {
+    return this.userService.createCoinTransactions({
+      userId: params.userId,
+      ...body,
+    });
   }
 }

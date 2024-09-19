@@ -26,4 +26,9 @@ export const ERRORS = {
     message: 'User not found',
     statusCode: HttpStatusCode.NotFound,
   },
+  'USER-0005': {
+    errorCode: 'USER-0005',
+    message: 'Not enough coin',
+    statusCode: HttpStatusCode.BadRequest,
+  },
 };

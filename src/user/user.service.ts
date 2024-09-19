@@ -4,6 +4,7 @@ import { User } from './entity/user.entity';
 import { AuthService } from 'src/auth/auth.service';
 import { RefreshTokenRepository } from './repository/refresh-token.repository';
 import { CoinTransactionRepository } from './repository/coin-transaction.repository';
+import { ApiError } from 'src/common/error/api.error';
 
 @Injectable()
 export class UserService {
@@ -39,5 +40,28 @@ export class UserService {
 
   async getCoinTransactionsByUserId(userId: number) {
     return this.coinTransactionRepository.getAllByUserId(userId);
+  }
+
+  async createCoinTransactions(input: {
+    userId: number;
+    changeAmount: number;
+    description: string;
+  }) {
+    const user = await this.getUserByPk(input.userId);
+    if (!user) {
+      throw new ApiError('USER-0004');
+    }
+    if (user.coin + input.changeAmount < 0) {
+      throw new ApiError('USER-0005');
+    }
+    user.coin += input.changeAmount;
+    await this.userRepository.update(user);
+
+    return this.coinTransactionRepository.create({
+      user,
+      changeAmount: input.changeAmount,
+      description: input.description,
+      coin: user.coin,
+    });
   }
 }
