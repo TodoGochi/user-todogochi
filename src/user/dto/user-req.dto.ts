@@ -10,10 +10,6 @@ export class UserIdReqParamDto {
 export class CreateCoinTransactionReqBodyDto {
   @Type(() => Number)
   @IsInt()
-  userId: number;
-
-  @Type(() => Number)
-  @IsInt()
   changeAmount: number;
 
   @IsString()
