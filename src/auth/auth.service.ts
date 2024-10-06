@@ -83,6 +83,11 @@ export class AuthService {
       password: hashedPassword,
     });
     const tokens = await this.generateTokens(user);
+    await this.userService.createCoinTransactions({
+      userId: user.userId,
+      changeAmount: 1000,
+      description: '회원가입 리워드',
+    });
     delete user.password;
 
     return { user, tokens };
