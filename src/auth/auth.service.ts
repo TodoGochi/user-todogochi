@@ -85,7 +85,7 @@ export class AuthService {
     const tokens = await this.generateTokens(user);
     await this.userService.createCoinTransactions({
       userId: user.userId,
-      changeAmount: 1000,
+      changeAmount: 10,
       description: '회원가입 리워드',
     });
     delete user.password;
